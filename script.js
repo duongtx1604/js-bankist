@@ -69,7 +69,6 @@ const currencies = new Map([
 
 const displayMovements = function (movements) {
   containerMovements.innerHTML = '';
-
   movements.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     const html = `
@@ -79,11 +78,23 @@ const displayMovements = function (movements) {
         <div class="movements__value">${mov}</div>
     </div>
     `;
-
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
+
 displayMovements(account1.movements);
+const createUsernames = function (accounts) {
+  accounts.forEach(function (acc) {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map(name => name[0])
+      .join('');
+  });
+};
+
+createUsernames(accounts);
+console.log(accounts);
 
 ///////////////////////////////////////////////
 ///////////////////////////////////////////////
