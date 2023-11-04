@@ -13,24 +13,24 @@ const account1 = {
 };
 
 const account2 = {
-  owner: 'Jessica Davis',
+  owner: 'Jessica New',
   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
   interestRate: 1.5,
-  pin: 2222,
+  pin: 2,
 };
 
 const account3 = {
-  owner: 'Steven Thomas Williams',
+  owner: 'Steven Thomas',
   movements: [200, -200, 340, -300, -20, 50, 400, -460],
   interestRate: 0.7,
-  pin: 3333,
+  pin: 3,
 };
 
 const account4 = {
   owner: 'Sarah Smith',
   movements: [430, 1000, 700, 50, 90],
   interestRate: 1,
-  pin: 4444,
+  pin: 4,
 };
 
 const accounts = [account1, account2, account3, account4];
@@ -66,6 +66,9 @@ const currencies = new Map([
   ['EUR', 'Euro'],
   ['GBP', 'Pound sterling'],
 ]);
+//Event handler
+let currentAccount;
+
 // display Movements
 const displayMovements = function (movements) {
   containerMovements.innerHTML = '';
@@ -83,10 +86,12 @@ const displayMovements = function (movements) {
 };
 
 // displayBalance
-const displayBalance = function (movements) {
-  const balance = movements.reduce((sum, acc) => sum + acc, 0);
-  labelBalance.textContent = `${balance} EUR`;
+const displayBalance = function (acc) {
+  const balance = acc.movements.reduce((sum, acc) => sum + acc, 0);
+  acc.balance = balance;
+  labelBalance.textContent = `${acc.balance} EUR`;
 };
+console.log(accounts);
 
 //create Usernames
 const createUsernames = function (accounts) {
@@ -119,9 +124,7 @@ const calSummary = function (acc) {
   labelSumInterest.textContent = `${Math.trunc(interest)} EUR`;
 };
 
-//Event handler
-let currentAccount;
-
+//Login click
 btnLogin.addEventListener('click', function (e) {
   // Prevent form form submitting
   e.preventDefault();
@@ -142,16 +145,66 @@ btnLogin.addEventListener('click', function (e) {
     //clear input
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
-    // display movements
-    displayMovements(currentAccount.movements);
-    // display balance
-    displayBalance(currentAccount.movements);
-    //display summary
-    calSummary(currentAccount);
+    inputLoginUsername.blur();
+
+    updateUI(currentAccount);
+  }
+});
+const updateUI = function (acc) {
+  // display movements
+  displayMovements(acc.movements);
+  // display balance
+  displayBalance(acc);
+  //display summary
+  calSummary(acc);
+};
+
+//Transfer
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const receiverAcc = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
+  if (
+    receiverAcc &&
+    receiverAcc?.username !== currentAccount?.username &&
+    amount > 0 &&
+    currentAccount.balance >= amount
+  ) {
+    //transfer
+    currentAccount.movements.push(-Math.abs(amount));
+    receiverAcc.movements.push(Math.abs(amount));
+
+    //clear input
+    inputTransferAmount.value = inputTransferTo.value = '';
+    inputTransferAmount.blur();
+    inputTransferTo.blur();
+
+    //update UI
+    updateUI(currentAccount);
+    console.log('Transfer complete');
+  } else {
+    //clear input
+    inputTransferAmount.value = inputTransferTo.value = '';
+    inputTransferAmount.blur();
+    inputTransferTo.blur();
+    console.log('Transfer error');
   }
 });
 
-const movements = [430, 5000, -1000, 700, -50, 90, 1000];
+//
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+  currentAccount = accounts.find(acc => {
+    return (
+      acc.username === inputLoginUsername.value &&
+      acc.pin === Number(inputLoginPin.value)
+    );
+  });
+});
+
+// const movements = [430, 5000, -1000, 700, -50, 90, 1000];
 
 ///////////////////////////////////////////////
 ///////////////////////////////////////////////
