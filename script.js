@@ -70,9 +70,12 @@ const currencies = new Map([
 let currentAccount;
 
 // display Movements
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = '';
-  movements.forEach(function (mov, i) {
+
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     const html = `
     <div class="movements__row">
@@ -91,7 +94,6 @@ const displayBalance = function (acc) {
   acc.balance = balance;
   labelBalance.textContent = `${acc.balance} EUR`;
 };
-console.log(accounts);
 
 //create Usernames
 const createUsernames = function (accounts) {
@@ -159,6 +161,22 @@ const updateUI = function (acc) {
   calSummary(acc);
 };
 
+// Loan
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  const amount = Number(inputLoanAmount.value);
+  if (amount > 0 && currentAccount.movements.some(mov => mov > amount * 0.1)) {
+    currentAccount.movements.push(Math.abs(amount));
+    updateUI(currentAccount);
+    console.log(`Loan complete`);
+    inputLoanAmount.value = '';
+  } else {
+    console.log(`Loan error`);
+    inputLoanAmount.value = '';
+  }
+});
+
 //Transfer
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault();
@@ -193,15 +211,30 @@ btnTransfer.addEventListener('click', function (e) {
   }
 });
 
-//
+// Close account
 btnClose.addEventListener('click', function (e) {
   e.preventDefault();
-  currentAccount = accounts.find(acc => {
-    return (
-      acc.username === inputLoginUsername.value &&
-      acc.pin === Number(inputLoginPin.value)
+
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
     );
-  });
+
+    accounts.splice(index, 1);
+    inputCloseUsername.value = inputClosePin.value = '';
+    document.querySelector('.app').classList.remove('active');
+  }
+});
+
+// Sort
+let sorted = false;
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
 });
 
 // const movements = [430, 5000, -1000, 700, -50, 90, 1000];
