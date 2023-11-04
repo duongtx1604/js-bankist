@@ -66,7 +66,7 @@ const currencies = new Map([
   ['EUR', 'Euro'],
   ['GBP', 'Pound sterling'],
 ]);
-
+// display Movements
 const displayMovements = function (movements) {
   containerMovements.innerHTML = '';
   movements.forEach(function (mov, i) {
@@ -81,8 +81,16 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-
 displayMovements(account1.movements);
+
+// displayBalance
+const displayBalance = function (movements) {
+  const balance = movements.reduce((sum, acc) => sum + acc, 0);
+  labelBalance.textContent = `${balance} EUR`;
+};
+displayBalance(account1.movements);
+
+//create Usernames
 const createUsernames = function (accounts) {
   accounts.forEach(function (acc) {
     acc.username = acc.owner
@@ -92,9 +100,9 @@ const createUsernames = function (accounts) {
       .join('');
   });
 };
-
 createUsernames(accounts);
-console.log(accounts);
+
+const movements = [430, -1000, 700, -50, 90, 1000];
 
 ///////////////////////////////////////////////
 ///////////////////////////////////////////////
