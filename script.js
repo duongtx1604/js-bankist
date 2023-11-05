@@ -241,7 +241,61 @@ btnSort.addEventListener('click', function (e) {
 
 ///////////////////////////////////////////////
 ///////////////////////////////////////////////
+
 // LECTURES;
+
+// const dogs = [
+//   { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+//   { weight: 8, curFood: 200, owners: ['Matilda'] },
+//   { weight: 13, curFood: 275, owners: ['Sarah', 'John'] },
+//   { weight: 32, curFood: 340, owners: ['Michael'] },
+// ];
+// //1
+// dogs.forEach(function (dog) {
+//   dog.recommendedFood = Math.trunc(dog.weight ** 0.75 * 28);
+// });
+// //2
+
+// const dogSarah = dogs.find(dog => dog.owners.includes('Sarah'));
+// console.log(
+//   `Sarah's dog is eating ${
+//     dogSarah.curFood >= dogSarah.recommendedFood ? `too much` : `to little`
+//   }`
+// );
+
+// //3
+// const ownersEatTooMuch = dogs
+//   .filter(dog => dog.curFood > dog.recommendedFood)
+//   .flatMap(dog => dog.owners);
+// console.log(ownersEatTooMuch);
+// const ownersEatTooLittle = dogs
+//   .filter(dog => dog.curFood < dog.recommendedFood)
+//   .flatMap(dog => dog.owners);
+// console.log(ownersEatTooLittle);
+
+// //4
+// console.log(`${ownersEatTooLittle.join(' and ')}'s dogs eat too little!`);
+
+// console.log(`${ownersEatTooMuch.join(' and ')}'s dogs eat too much!`);
+
+// //5
+// console.log(dogs.some(dog => dog.curFood === dog.recommendedFood));
+
+// //6
+// const OKAY = dog =>
+//   dog.curFood < dog.recommendedFood + dog.recommendedFood * 0.1 &&
+//   dog.curFood > dog.recommendedFood - dog.recommendedFood * 0.1;
+// console.log(dogs.some(OKAY));
+
+// //7
+// const dogOkey = dogs.filter(OKAY);
+// console.log(dogOkey);
+
+// //8
+// const dogCopy = dogs
+//   .slice()
+//   .sort((a, b) => a.recommendedFood - b.recommendedFood);
+// console.log(dogCopy);
 
 // const currencies = new Map([
 //   ['USD', 'United States dollar'],
