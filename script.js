@@ -13,14 +13,14 @@ const account1 = {
   pin: 1,
 
   movementsDates: [
-    '2019-11-18T21:31:17.178Z',
-    '2019-12-23T07:42:02.383Z',
-    '2020-01-28T09:15:04.904Z',
-    '2020-04-01T10:17:24.185Z',
-    '2020-05-08T14:11:59.604Z',
-    '2020-05-27T17:01:17.194Z',
-    '2020-07-11T23:36:17.929Z',
-    '2020-07-12T10:51:36.790Z',
+    '2022-11-18T21:31:17.178Z',
+    '2022-12-23T07:42:02.383Z',
+    '2023-01-28T09:15:04.904Z',
+    '2023-04-01T10:17:24.185Z',
+    '2023-05-08T14:11:59.604Z',
+    '2023-05-27T17:01:17.194Z',
+    '2023-07-11T23:36:17.929Z',
+    '2023-07-12T10:51:36.790Z',
   ],
   currency: 'EUR',
   locale: 'pt-PT', // de-DE
@@ -33,14 +33,14 @@ const account2 = {
   pin: 2,
 
   movementsDates: [
-    '2019-11-01T13:15:33.035Z',
-    '2019-11-30T09:48:16.867Z',
-    '2019-12-25T06:04:23.907Z',
-    '2020-01-25T14:18:46.235Z',
-    '2020-02-05T16:33:06.386Z',
-    '2020-04-10T14:43:26.374Z',
-    '2020-06-25T18:49:59.371Z',
-    '2020-07-26T12:01:20.894Z',
+    '2022-11-04T13:15:33.035Z',
+    '2022-11-30T09:48:16.867Z',
+    '2022-12-25T06:04:23.907Z',
+    '2023-01-25T14:18:46.235Z',
+    '2023-02-05T16:33:06.386Z',
+    '2023-04-10T14:43:26.374Z',
+    '2023-11-05T18:49:59.371Z',
+    '2023-11-06T12:01:20.894Z',
   ],
   currency: 'USD',
   locale: 'en-US',
@@ -112,11 +112,23 @@ const displayMovements = function (acc, sort = false) {
   movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
-    const date = new Date(acc.movementsDates[i]);
-    const day = `${date.getDate()}`.padStart(2, 0);
-    const month = `${date.getMonth()}`.padStart(2, 0);
-    const year = date.getFullYear();
-    const displayDate = `${day}/${month}/${year}`;
+    const calcDaysPassed = (date1, date2) => {
+      const days = Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
+      console.log(days);
+      if (days === 0) {
+        const hour = `${date1.getHours()}`.padStart(2, 0);
+        const min = `${date1.getMinutes()}`.padStart(2, 0);
+        return `Today ${hour}:${min}`;
+      } else if (days === 1) {
+        const hour = `${date1.getHours()}`.padStart(2, 0);
+        const min = `${date1.getMinutes()}`.padStart(2, 0);
+        return `Yesterday ${hour}:${min}`;
+      } else {
+        return `${days} days ago`;
+      }
+    };
+
+    const displayDate = calcDaysPassed(new Date(acc.movementsDates[i]), now);
     const html = `
     <div class="movements__row">
         <div class="movements__type movements__type--${type}">
